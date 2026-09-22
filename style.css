@@ -1,0 +1,181 @@
+/* =========================================
+   Reset e Configuração Geral
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif; /* Fonte simples e segura */
+}
+
+body {
+    background-color: #121212; /* Fundo escuro padrão */
+    color: #f5f5f5; /* Texto claro */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* =========================================
+   Cabeçalho
+   ========================================= */
+header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.logo { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    width: 100%; 
+    margin: 0; 
+    padding: 10px 0; 
+} 
+
+.logo-img { 
+    width: 180px;
+    max-width: 100%;
+    height: auto;
+    display: block; 
+}
+
+footer {
+    margin-top: auto; /* Empurra o rodapé pro final da página */
+    padding-top: 40px;
+    font-size: 14px;
+    color: #888888;
+}
+
+/* =========================================
+   Container Principal (Mobile-First)
+   ========================================= */
+main {
+    width: 100%;
+    max-width: 600px; /* Não deixa a tela ficar gigante no computador */
+    background-color: #1e1e1e; /* Fundo do card um pouco mais claro que o body */
+    padding: 30px;
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombreado leve */
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+/* Classe para esconder a segunda tela no começo */
+.oculto {
+    display: none !important;
+}
+
+/* =========================================
+   Formulário (RF09)
+   ========================================= */
+/* O formulário usa Flexbox para empilhar tudo certinho */
+#form-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre os campos */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Espaço entre a label e o input */
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Estilo das caixas de texto */
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    background-color: #2b2b2b; /* Fundo do input escuro */
+    color: #ffffff;
+    font-size: 16px;
+}
+
+/* Muda a borda quando o usuário clica para digitar */
+input:focus {
+    outline: none;
+    border-color: #e50914; /* Vermelho */
+}
+
+/* =========================================
+   Gêneros (Checkboxes)
+   ========================================= */
+fieldset {
+    border: 1px solid #333333;
+    border-radius: 5px;
+    padding: 15px;
+    /* Começa em coluna (mobile-first) para telas pequenas */
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+}
+
+legend {
+    padding: 0 10px;
+    font-weight: bold;
+    color: #cccccc;
+}
+
+fieldset label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* =========================================
+   Botões
+   ========================================= */
+button {
+    background-color: #e50914; /* Vermelho */
+    color: #ffffff;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Efeito quando passa o mouse por cima do botão */
+button:hover {
+    background-color: #b20710; /* Vermelho mais escuro */
+}
+
+/* =========================================
+   Media Queries (Adaptação para Desktop)
+   ========================================= */
+/* Quando a tela for maior que 768px (computadores/tablets), faz isso: */
+@media (min-width: 768px) {
+
+    .logo-img { 
+        width: 300px;
+    }
+
+    fieldset {
+        /* Muda de coluna para linha */
+        flex-direction: row;
+        flex-wrap: wrap; /* Permite que os itens quebrem a linha se não couber */
+    }
+    
+    fieldset label {
+        /* Faz cada checkbox ocupar quase metade do espaço, ficando em duas colunas */
+        width: 45%; 
+    }
+}
