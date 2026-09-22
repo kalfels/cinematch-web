@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch Web | Recomendação de Séries</title>
+    <meta name="description" content="Descubra sua próxima série favorita com o motor de recomendação em tempo real do CineMatch.">
+    <!-- Tags Open Graph (OG) para Redes Sociais -->
+    <meta property="og:title" content="CineMatch Web | Recomendação de Séries em Tempo Real">
+    <meta property="og:description" content="Descubra sua próxima série favorita com o motor de recomendação em tempo real do CineMatch.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kalfels.github.io/cinematch-web/">
+    <meta property="og:image" content="https://dummyimage.com/1200x630/2e2c2e/c20606.png&text=CineMatch+Web">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 class="logo">
+            <img src="assets/logotipo.png" alt="CineMatch Web. Recomendação de Séries em Tempo Real - Página Inicial" class="logo-img">
+        </h1>
+    </header>
+
+    <main>
+        <section id="tela-perfil">
+            <h2>Crie seu Perfil</h2>
+            
+            <form id="form-perfil">
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" placeholder="Ex: Ana Souza" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="idade">Idade</label>
+                    <input type="number" id="idade" min="1" placeholder="Ex: 28" required>
+                </div>
+
+                <fieldset>
+                    <legend>Gêneros favoritos</legend>
+                    <label><input type="checkbox" name="genero" value="Drama"> Drama</label>
+                    <label><input type="checkbox" name="genero" value="Comedy"> Comédia</label>
+                    <label><input type="checkbox" name="genero" value="Action"> Ação</label>
+                    <label><input type="checkbox" name="genero" value="Horror"> Terror</label>
+                    <label><input type="checkbox" name="genero" value="Science-Fiction"> Ficção Científica</label>
+                </fieldset>
+
+                <button type="submit">Ver recomendações</button>
+            </form>
+        </section>
+
+        <section id="tela-resultados" class="oculto">
+            <h2>Recomendado pra você</h2>
+            
+            <div id="resultados">
+                
+                <article class="card-serie">
+                    <h3>Título da Série Exemplo</h3>
+                    <p>Compatibilidade: 100%</p>
+                    <span class="badge Alta">Alta afinidade</span>
+                </article>
+                
+            </div>
+            
+            <button id="btn-voltar">Trocar perfil</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 CineMatch Web. Projeto Avaliativo SCTEC SENAI.</p>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
