@@ -1,16 +1,18 @@
-// Lógica principal (Formulário, LocalStorage, Validação e Eventos)
+// script.js - Lógica principal (Formulário, LocalStorage, Fetch, Cálculo e Orquestração)
 
-import { exibirErro, limparErro } from './ui.js';
-import { tratarCatalogo } from './modelo.js';
+import { exibirErro, limparErro, exibirContador } from './ui.js';
+import { tratarCatalogo, Serie, criarContador } from './modelo.js';
 
-// ==========================================
-// RF04, RF05 & RF12: Consumo da API + tratamento do catálogo
-// ==========================================
+// RF11: contador por closure (vive enquanto a página estiver aberta)
+const contadorRecalculos = criarContador();
 
-// Guarda o catálogo tratado para as próximas etapas (RF06/RF07)
+// Guarda o catálogo tratado e as recomendações calculadas (usados no RF08)
 let catalogo = [];
+let recomendacoes = [];
 
-// Busca, trata e devolve o catálogo. Sempre retorna um array (vazio em caso de erro).
+// ==========================================
+// RF04, RF05 & RF12: Consumo da API TVMaze via Fetch
+// ==========================================
 async function buscarCatalogoSeries() {
     const containerResultados = document.getElementById('resultados');
 
@@ -18,7 +20,6 @@ async function buscarCatalogoSeries() {
         // ESTADO 1 - CARREGANDO (RF12)
         containerResultados.innerHTML = "<p class='aviso-msg'>Buscando as melhores séries pra você...</p>";
 
-        // Pequeno atraso proposital para evidenciar o carregamento
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         const resposta = await fetch('https://api.tvmaze.com/shows?page=0');
@@ -28,13 +29,10 @@ async function buscarCatalogoSeries() {
         }
 
         const dadosBrutos = await resposta.json();
-        console.log("Catálogo bruto carregado com sucesso:", dadosBrutos);
-
-        // RF05: filter, sort, slice e map
         const catalogoTratado = tratarCatalogo(dadosBrutos);
         console.log("Catálogo tratado com sucesso:", catalogoTratado);
 
-        // ESTADO 2 - VAZIO (RF05)
+        // ESTADO 2 - VAZIO
         if (catalogoTratado.length === 0) {
             containerResultados.innerHTML = `
                 <p class="aviso-msg">Não encontramos recomendações agora. Tente novamente mais tarde.</p>
@@ -42,18 +40,31 @@ async function buscarCatalogoSeries() {
             return [];
         }
 
-        // Sucesso: limpa a mensagem de carregamento (os cards serão gerados no RF08)
         containerResultados.innerHTML = "";
         return catalogoTratado;
 
     } catch (erro) {
-        // ESTADO 3 - ERRO (RF04)
+        // ESTADO 3 - ERRO
         console.error("Erro capturado no catch:", erro);
         containerResultados.innerHTML = `
             <p class="erro-msg" role="alert">Ops! Não foi possível carregar as séries no momento. Verifique sua conexão e tente novamente.</p>
         `;
         return [];
     }
+}
+
+// ==========================================
+// RF06 & RF07: Instancia as séries e calcula a compatibilidade
+// ==========================================
+function calcularRecomendacoes(catalogoTratado, usuario) {
+    return catalogoTratado
+        .map(dados => new Serie(dados))
+        .map(serie => ({
+            serie,
+            ...serie.calcularCompatibilidade(usuario.generosFavoritos)
+        }))
+        // Maior compatibilidade primeiro; empate resolvido pela nota da série
+        .sort((a, b) => b.percentual - a.percentual || b.serie.nota - a.serie.nota);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -67,9 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputIdade = document.querySelector("#idade");
     const fieldsetGeneros = document.querySelector("fieldset");
 
-    // =========================================================================
-    // RF03: Verificação inicial do localStorage (com proteção contra JSON inválido)
-    // =========================================================================
+    // RF03: carrega o perfil salvo (trata null e JSON inválido)
     const perfilSalvo = localStorage.getItem("cinematchPerfil");
 
     if (perfilSalvo) {
@@ -83,9 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // =========================================================================
-    // RF02: Captura do formulário com preventDefault e validação
-    // =========================================================================
+    // RF02: captura e validação do formulário
     formPerfil.addEventListener("submit", (e) => {
         e.preventDefault();
         limparErro();
@@ -111,13 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const usuario = {
-            nome: nome,
-            idade: idade,
-            generosFavoritos: generosFavoritos
-        };
+        const usuario = { nome, idade, generosFavoritos };
 
-        // RF03: salva o perfil
         localStorage.setItem("cinematchPerfil", JSON.stringify(usuario));
         console.log("Perfil salvo com sucesso no LocalStorage:", usuario);
 
@@ -135,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Troca de tela + busca do catálogo (só busca quando há perfil)
+    // Troca de tela, busca o catálogo e calcula a compatibilidade
     async function mostrarResultados(usuario) {
         telaPerfil.classList.add("oculto");
         telaResultados.classList.remove("oculto");
@@ -146,6 +148,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         catalogo = await buscarCatalogoSeries();
-        console.log("Catálogo pronto para o cálculo de compatibilidade (RF07):", catalogo);
+        if (catalogo.length === 0) {
+            return;
+        }
+
+        // RF06 + RF07: valida a lógica no console antes de desenhar os cards (RF08)
+        recomendacoes = calcularRecomendacoes(catalogo, usuario);
+        console.table(recomendacoes.map(r => ({
+            titulo: r.serie.titulo,
+            resumo: r.serie.exibirResumo(),
+            comuns: r.comuns.join(", ") || "-",
+            naoExplorados: r.naoExplorados.join(", ") || "-",
+            percentual: `${r.percentual}%`,
+            classificacao: r.classificacao
+        })));
+
+        // RF11: incrementa o contador (closure) e mostra na tela
+        exibirContador(contadorRecalculos.incrementar());
     }
 });

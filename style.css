@@ -222,7 +222,12 @@ button:hover {
     color: #ffffff;
     font-weight: bold;
 }
- 
+
+.contador {
+    font-size: 13px;
+    color: #888888;
+    text-align: center;
+}
 
 /* =========================================
    Media Queries (Adaptação para Desktop)
