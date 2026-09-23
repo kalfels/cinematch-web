@@ -2,7 +2,50 @@
 
 import { exibirErro, limparErro } from './ui.js';
 
+// ==========================================
+// RF04 & RF12: Consumo da API TVMaze via Fetch
+// ==========================================
+
+// Função assíncrona para buscar o catálogo de séries
+async function buscarCatalogoSeries() {
+    const containerResultados = document.getElementById('resultados');
+    
+    try {
+        // RF12: Exibir mensagem de carregamento inicial (feedback visual)
+        containerResultados.innerHTML = "<p>Buscando as melhores séries pra você...</p>";
+
+        // Pequeno atraso proposital com setTimeout para simular/evidenciar o carregamento
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Realiza a requisição fetch na API pública da TVMaze
+        const resposta = await fetch('https://api.tvmaze.com/shows?page=0');
+
+        // Valida se a resposta da requisição foi bem-sucedida (response.ok)
+        if (!resposta.ok) {
+            throw new Error(`Erro na API: ${resposta.status}`);
+        }
+
+        // Converte a resposta para formato JSON
+        const dadosBrutos = await resposta.json();
+
+        console.log("Catálogo bruto carregado com sucesso:", dadosBrutos);
+
+        // Próximo passo (RF05): Chamar a função de tratamento de array aqui
+        // tratarCatalogo(dadosBrutos);
+
+    } catch (erro) {
+        // RF04: Tratamento de falhas de rede/API exibindo mensagem amigável
+        console.error("Erro capturado no catch:", erro);
+        containerResultados.innerHTML = `
+            <p class="erro-msg">Ops! Não foi possível carregar as séries no momento. Verifique sua conexão e tente novamente.</p>
+        `;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+
+    buscarCatalogoSeries();
+
     const formPerfil = document.querySelector("#form-perfil");
     const telaPerfil = document.querySelector("#tela-perfil");
     const telaResultados = document.querySelector("#tela-resultados");

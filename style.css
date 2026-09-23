@@ -177,6 +177,26 @@ button:hover {
 }
 
 /* =========================================
+   Centralização do Botão de Trocar Perfil
+   ========================================= */
+#tela-resultados {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente todos os itens filhos (inclusive o botão) */
+    gap: 20px;
+}
+
+#btn-voltar {
+    width: 100%;
+    max-width: 250px; /* Deixa o botão com um tamanho elegante e centralizado */
+    background-color: #e50914; /* Um tom cinza diferenciado para a ação de voltar/trocar */
+}
+
+#btn-voltar:hover {
+    background-color: #555555;
+}
+
+/* =========================================
    Media Queries (Adaptação para Desktop)
    ========================================= */
 /* Quando a tela for maior que 768px (computadores/tablets), faz isso: */

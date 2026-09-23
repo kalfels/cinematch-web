@@ -23,3 +23,6 @@ feat: adiciona estrutura inicial do html e css
 - manipula telas e informações conforme status do localstorage
 - fazer testes e verificar o localstorage e console
 - ajustar validações dos campos do formulário
+- criado o consumo da API do TVMaze na pagina inicial para testes
+- Utilizado async/await com promise
+- efetuado testes de conectividade com a API e queda de conexão, comportamentos foram como esperados.
