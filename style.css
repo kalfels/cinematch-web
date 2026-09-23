@@ -197,6 +197,34 @@ button:hover {
 }
 
 /* =========================================
+   Mensagens de estado do catálogo (RF04/RF05/RF12)
+   Cole este bloco no FINAL do seu style.css
+   ========================================= */
+.aviso-msg,
+.erro-msg {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+ 
+/* Carregando e vazio: tom neutro */
+.aviso-msg {
+    background-color: #2b2b2b;
+    color: #cccccc;
+    border: 1px solid #333333;
+}
+ 
+/* Erro: vermelho, igual ao .mensagem-erro do formulário */
+.erro-msg {
+    background-color: #e50914;
+    color: #ffffff;
+    font-weight: bold;
+}
+ 
+
+/* =========================================
    Media Queries (Adaptação para Desktop)
    ========================================= */
 /* Quando a tela for maior que 768px (computadores/tablets), faz isso: */
