@@ -32,3 +32,18 @@ feat: adiciona estrutura inicial do html e css
 - com .sort ordenamos as séries em ordem decrescente com base na nota (da maior para a menor)
 - com .slice limitamos o catálogo resultante para exibir apenas as top 8 melhores séries
 - importamos tratarCatalogo e verificamos no console.log se os dados estão sendo tratados conforme função tratarCatalogo();
+- criadas as classes Conteudo e Serie em modelo.js (POO), adaptadas do CineMatch JS original
+- Conteudo guarda id, titulo, tipo, generos, duracaoMinutos e imagem, com os métodos exibirResumo(), classificar() e calcularCompatibilidade()
+- Serie usa herança (extends + super), fixa o tipo "Série", acrescenta o atributo nota e o método exibirNota(), e sobrescreve exibirResumo() reaproveitando o da classe base
+- no projeto original a Serie tinha "temporadas"; na versão web foi trocado por "nota", porque a TVMaze não devolve temporadas no endpoint /shows
+- compatibilidade calculada com a mesma regra do projeto original: (gêneros em comum / total de gêneros da série) x 100, com Math.round
+- gêneros não explorados montados com um laço for...of
+- classificação com if / else if / else, mantendo as faixas do original: Alta afinidade (80% ou mais), Média afinidade (50% a 79%) e Baixa afinidade (abaixo de 50%)
+- o cálculo devolve também um "nivel" sem acento (Alta, Media, Baixa), para ser usado como classe CSS dos badges
+- calcularRecomendacoes() em script.js instancia cada série com new Serie(), calcula a compatibilidade e ordena por percentual (empate resolvido pela nota)
+- lógica validada no console com console.table antes de desenhar os cards (RF08)
+- criada uma closure (criarContador) que mantém a variável total privada, com os métodos incrementar() e obterTotal()
+- o contador de recálculos da sessão é exibido na tela pela função exibirContador() em ui.js
+- o contador vive em memória: zera ao recarregar a página (F5), o que corresponde a "nesta sessão" no desafio
+- mensagem de erro do formulário com role="alert", e o fieldset recebe tabindex="-1" para poder receber foco
+- testes realizados: perfil só com Drama (100%, 50% e 0% conferidos na mão), limite de 50% classificado como Média, contador subindo ao trocar de perfil e reenviar o formulário
