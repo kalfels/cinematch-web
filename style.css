@@ -159,6 +159,24 @@ button:hover {
 }
 
 /* =========================================
+   Destaque de Erro nos Campos (Borda Branca)
+   ========================================= */
+.input-erro {
+    border: 1px solid #ffffff !important;
+}
+
+.mensagem-erro {
+    background-color: #e50914;
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* =========================================
    Media Queries (Adaptação para Desktop)
    ========================================= */
 /* Quando a tela for maior que 768px (computadores/tablets), faz isso: */
