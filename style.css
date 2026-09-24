@@ -213,6 +213,12 @@ fieldset.input-erro {
     text-align: center;
 }
 
+.boas-vindas {
+    font-size: 15px;
+    color: #cccccc;
+    text-align: center;
+}
+
 /* =========================================
    Mensagens de estado do catálogo (RF04/RF05/RF12)
    ========================================= */
