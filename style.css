@@ -18,28 +18,34 @@ body {
     padding: 20px;
 }
 
+/* Foco visível para navegação por teclado (acessibilidade, RF13) */
+:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
 /* =========================================
-   Cabeçalho
+   Cabeçalho e Rodapé
    ========================================= */
 header {
     margin-bottom: 30px;
     text-align: center;
 }
 
-.logo { 
-    display: flex; 
-    justify-content: center; 
+.logo {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    width: 100%; 
-    margin: 0; 
-    padding: 10px 0; 
-} 
+    width: 100%;
+    margin: 0;
+    padding: 10px 0;
+}
 
-.logo-img { 
+.logo-img {
     width: 180px;
     max-width: 100%;
     height: auto;
-    display: block; 
+    display: block;
 }
 
 footer {
@@ -54,11 +60,16 @@ footer {
    ========================================= */
 main {
     width: 100%;
-    max-width: 600px; /* Não deixa a tela ficar gigante no computador */
+    max-width: 600px; /* Largura do formulário */
     background-color: #1e1e1e; /* Fundo do card um pouco mais claro que o body */
     padding: 30px;
-    border-radius: 8px; /* Bordas arredondadas */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombreado leve */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Na tela de resultados o container fica mais largo para caber os cards */
+main.main-largo {
+    max-width: 1100px;
 }
 
 h2 {
@@ -67,15 +78,14 @@ h2 {
     color: #ffffff;
 }
 
-/* Classe para esconder a segunda tela no começo */
+/* Esconde uma tela (sem !important: nenhuma regra de ID força display nela) */
 .oculto {
-    display: none !important;
+    display: none;
 }
 
 /* =========================================
    Formulário (RF09)
    ========================================= */
-/* O formulário usa Flexbox para empilhar tudo certinho */
 #form-perfil {
     display: flex;
     flex-direction: column;
@@ -93,22 +103,20 @@ label {
     font-size: 14px;
 }
 
-/* Estilo das caixas de texto */
 input[type="text"],
 input[type="number"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #333333;
     border-radius: 5px;
-    background-color: #2b2b2b; /* Fundo do input escuro */
+    background-color: #2b2b2b;
     color: #ffffff;
     font-size: 16px;
 }
 
-/* Muda a borda quando o usuário clica para digitar */
+/* Borda vermelha ao focar (o contorno branco vem da regra :focus-visible) */
 input:focus {
-    outline: none;
-    border-color: #e50914; /* Vermelho */
+    border-color: #e50914;
 }
 
 /* =========================================
@@ -118,9 +126,9 @@ fieldset {
     border: 1px solid #333333;
     border-radius: 5px;
     padding: 15px;
-    /* Começa em coluna (mobile-first) para telas pequenas */
+    /* Começa em coluna (mobile-first) */
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 10px;
 }
 
@@ -142,7 +150,7 @@ fieldset label {
    Botões
    ========================================= */
 button {
-    background-color: #e50914; /* Vermelho */
+    background-color: #e50914;
     color: #ffffff;
     border: none;
     padding: 15px;
@@ -153,16 +161,18 @@ button {
     margin-top: 10px;
 }
 
-/* Efeito quando passa o mouse por cima do botão */
 button:hover {
-    background-color: #b20710; /* Vermelho mais escuro */
+    background-color: #b20710;
 }
 
 /* =========================================
-   Destaque de Erro nos Campos (Borda Branca)
+   Erros do formulário (borda branca no campo)
+   Vem DEPOIS de input[type=...] e fieldset, com mesma especificidade,
+   por isso vence sem precisar de !important
    ========================================= */
-.input-erro {
-    border: 1px solid #ffffff !important;
+input.input-erro,
+fieldset.input-erro {
+    border: 1px solid #ffffff;
 }
 
 .mensagem-erro {
@@ -177,50 +187,24 @@ button:hover {
 }
 
 /* =========================================
-   Centralização do Botão de Trocar Perfil
+   Tela de resultados
    ========================================= */
-#tela-resultados {
+/* :not(.oculto) evita que o display:flex do ID vença a classe .oculto */
+#tela-resultados:not(.oculto) {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza horizontalmente todos os itens filhos (inclusive o botão) */
+    align-items: center; /* Centraliza os filhos, inclusive o botão */
     gap: 20px;
 }
 
 #btn-voltar {
     width: 100%;
-    max-width: 250px; /* Deixa o botão com um tamanho elegante e centralizado */
-    background-color: #e50914; /* Um tom cinza diferenciado para a ação de voltar/trocar */
+    max-width: 250px;
+    background-color: #e50914;
 }
 
 #btn-voltar:hover {
     background-color: #555555;
-}
-
-/* =========================================
-   Mensagens de estado do catálogo (RF04/RF05/RF12)
-   Cole este bloco no FINAL do seu style.css
-   ========================================= */
-.aviso-msg,
-.erro-msg {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    font-size: 14px;
-    text-align: center;
-}
- 
-/* Carregando e vazio: tom neutro */
-.aviso-msg {
-    background-color: #2b2b2b;
-    color: #cccccc;
-    border: 1px solid #333333;
-}
- 
-/* Erro: vermelho, igual ao .mensagem-erro do formulário */
-.erro-msg {
-    background-color: #e50914;
-    color: #ffffff;
-    font-weight: bold;
 }
 
 .contador {
@@ -230,23 +214,183 @@ button:hover {
 }
 
 /* =========================================
-   Media Queries (Adaptação para Desktop)
+   Mensagens de estado do catálogo (RF04/RF05/RF12)
    ========================================= */
-/* Quando a tela for maior que 768px (computadores/tablets), faz isso: */
+.aviso-msg,
+.erro-msg {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Carregando e vazio: tom neutro */
+.aviso-msg {
+    background-color: #2b2b2b;
+    color: #cccccc;
+    border: 1px solid #333333;
+}
+
+/* Erro: vermelho, igual ao .mensagem-erro do formulário */
+.erro-msg {
+    background-color: #e50914;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* =========================================
+   RF09: Cards de resultados (Flexbox, mobile-first)
+   ========================================= */
+/* Área dos cards: coluna no celular */
+#resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.card-serie {
+    display: flex;
+    flex-direction: column;
+    background-color: #2b2b2b;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-capa {
+    display: block;
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    background-color: #1e1e1e;
+}
+
+.card-corpo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+}
+
+.card-titulo {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.card-info {
+    font-size: 13px;
+    color: #aaaaaa;
+}
+
+.card-compat {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Badges de afinidade (o texto sempre aparece, não depende só da cor) */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.badge.Alta {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.badge.Media {
+    background-color: #f5a623;
+    color: #1a1a1a;
+}
+
+.badge.Baixa {
+    background-color: #555555;
+    color: #ffffff;
+}
+
+/* Gêneros */
+.card-generos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-generos-titulo {
+    font-size: 12px;
+    font-weight: bold;
+    color: #cccccc;
+}
+
+.lista-generos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+}
+
+.tag-genero {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: #1e1e1e;
+    border: 1px solid #444444;
+}
+
+.tag-comum {
+    border-color: #2e7d32;
+    color: #a5d6a7;
+}
+
+.tag-nao-explorado {
+    color: #cccccc;
+}
+
+.tag-vazia {
+    color: #888888;
+    border-style: dashed;
+}
+
+/* =========================================
+   Media Queries (Adaptação para Tablet e Desktop)
+   ========================================= */
+
+/* Tablet e acima: formulário em 2 colunas e 2 cards por linha */
 @media (min-width: 768px) {
 
-    .logo-img { 
+    .logo-img {
         width: 300px;
     }
 
     fieldset {
-        /* Muda de coluna para linha */
         flex-direction: row;
-        flex-wrap: wrap; /* Permite que os itens quebrem a linha se não couber */
+        flex-wrap: wrap; /* Permite quebrar a linha se não couber */
     }
-    
+
     fieldset label {
-        /* Faz cada checkbox ocupar quase metade do espaço, ficando em duas colunas */
-        width: 45%; 
+        width: 45%; /* Cada checkbox ocupa quase metade: duas colunas */
+    }
+
+    #resultados {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card-serie {
+        flex: 0 0 calc(50% - 10px);
+    }
+}
+
+/* Desktop: 3 cards por linha */
+@media (min-width: 1024px) {
+
+    .card-serie {
+        flex: 0 0 calc(33.333% - 14px);
     }
 }
