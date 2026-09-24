@@ -47,3 +47,23 @@ feat: adiciona estrutura inicial do html e css
 - o contador vive em memória: zera ao recarregar a página (F5), o que corresponde a "nesta sessão" no desafio
 - mensagem de erro do formulário com role="alert", e o fieldset recebe tabindex="-1" para poder receber foco
 - testes realizados: perfil só com Drama (100%, 50% e 0% conferidos na mão), limite de 50% classificado como Média, contador subindo ao trocar de perfil e reenviar o formulário
+- criada a renderização dinâmica dos cards (RF08): renderizarCard() e renderizarResultados() em ui.js, gerando um <article> por série com createElement, sem nenhum card fixo no HTML
+- cada card mostra capa (com alt "Capa da série ..."), título, nota, duração, percentual de compatibilidade, badge de afinidade, gêneros em comum e gêneros ainda não explorados
+- usado textContent em vez de innerHTML para inserir os dados vindos da API, evitando injetar HTML de fonte externa
+- criado um objeto de tradução dos gêneros (Comedy -> Comédia, Horror -> Terror...) usado só para exibição; o cálculo continua com os valores originais da TVMaze
+- os cards são exibidos ordenados por compatibilidade (maior primeiro), com a nota da série como critério de desempate
+- removido o console.table de validação, já que o resultado agora aparece na tela
+- estilização responsiva com Flexbox (RF09), mobile-first: 1 card por linha no celular, 2 a partir de 768px e 3 a partir de 1024px, com media queries
+- o container principal ganha a classe main-largo (via classList) na tela de resultados para caber os cards, e volta à largura estreita ao clicar em "Trocar perfil"
+- badges de afinidade (.Alta, .Media, .Baixa) com texto sempre visível, sem depender só da cor
+- CSS sem !important: o .oculto usa #tela-resultados:not(.oculto) para não perder para a regra de ID, e o destaque de erro usa input.input-erro / fieldset.input-erro, que vence pela ordem no arquivo
+- adicionado :focus-visible com contorno branco, para o foco do teclado ficar visível em campos, checkboxes e botões
+- organização em módulos ES (RF14): script.js importa de ui.js e modelo.js, e o index.html carrega com <script type="module" src="script.js"></script>
+- divisão de responsabilidades: script.js (fluxo, localStorage, fetch e cálculo), ui.js (tudo que toca a tela) e modelo.js (tratamento do catálogo, classes e closure)
+- testes realizados: 8 cards na tela ordenados por afinidade, layout em 375px (1 coluna), cerca de 800px (2) e 1200px (3), botão "Trocar perfil" escondendo os cards, e API offline mostrando a mensagem de erro
+
+## CommonJS x ESM
+
+- CommonJS (require / module.exports) foi usado no CineMatch JS original, que rodava no terminal com Node.js (por exemplo: const prompt = require('prompt-sync')()). Os módulos são carregados de forma síncrona.
+- ESM (import / export) é o padrão oficial do JavaScript e é o usado aqui, no navegador. Ele exige <script type="module"> no HTML e precisa de um servidor local (por isso o live-server), pois o navegador bloqueia módulos abertos direto pelo arquivo (file://).
+- Diferença prática: no CommonJS exportamos com module.exports = { ... }; no ESM usamos export function / export class e importamos com import { ... } from './arquivo.js', sempre com a extensão .js.
