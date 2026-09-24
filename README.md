@@ -67,3 +67,8 @@ feat: adiciona estrutura inicial do html e css
 - CommonJS (require / module.exports) foi usado no CineMatch JS original, que rodava no terminal com Node.js (por exemplo: const prompt = require('prompt-sync')()). Os módulos são carregados de forma síncrona.
 - ESM (import / export) é o padrão oficial do JavaScript e é o usado aqui, no navegador. Ele exige <script type="module"> no HTML e precisa de um servidor local (por isso o live-server), pois o navegador bloqueia módulos abertos direto pelo arquivo (file://).
 - Diferença prática: no CommonJS exportamos com module.exports = { ... }; no ESM usamos export function / export class e importamos com import { ... } from './arquivo.js', sempre com a extensão .js.
+
+- criada a função de callback exibirMensagemDeBoasVindas(nome) em ui.js (RF10)
+- executarCallbackOnboarding(nome, callback) em script.js recebe a função como parâmetro e a executa, no mesmo padrão do CineMatch JS original
+- o callback é disparado somente depois que a busca na API terminou e os cards foram renderizados; se a busca falhar ou vier vazia, ele não é chamado
+- a mensagem usa role="status" para ser anunciada por leitores de tela e é removida ao começar uma nova busca, para não mostrar o nome do perfil anterior
