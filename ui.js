@@ -171,3 +171,31 @@ export function renderizarResultados(recomendacoes) {
 
     recomendacoes.forEach(resultado => renderizarCard(resultado));
 }
+
+// =========================================================================
+// RF10: função usada como CALLBACK após o carregamento do catálogo
+// =========================================================================
+
+// Cria (ou reaproveita) o parágrafo de boas-vindas acima dos cards.
+// Fica fora de #resultados, senão o innerHTML das buscas apagaria a mensagem.
+export function exibirMensagemDeBoasVindas(nome) {
+    let mensagem = document.querySelector("#mensagem-boas-vindas");
+
+    if (!mensagem) {
+        mensagem = document.createElement("p");
+        mensagem.id = "mensagem-boas-vindas";
+        mensagem.className = "boas-vindas";
+        mensagem.setAttribute("role", "status"); // leitores de tela anunciam sem interromper
+        document.querySelector("#resultados").before(mensagem);
+    }
+
+    mensagem.textContent = `Bem-vindo ao CineMatch, ${nome}! Estas são as séries que mais combinam com você.`;
+}
+
+// Remove a mensagem (usada ao começar uma nova busca, para não mostrar o nome anterior)
+export function limparMensagemBoasVindas() {
+    const mensagem = document.querySelector("#mensagem-boas-vindas");
+    if (mensagem) {
+        mensagem.remove();
+    }
+}

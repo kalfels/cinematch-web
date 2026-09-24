@@ -1,6 +1,13 @@
 // script.js - Lógica principal (Formulário, LocalStorage, Fetch, Cálculo e Orquestração)
 
-import { exibirErro, limparErro, exibirContador, renderizarResultados } from './ui.js';
+import {
+    exibirErro,
+    limparErro,
+    exibirContador,
+    renderizarResultados,
+    exibirMensagemDeBoasVindas,
+    limparMensagemBoasVindas
+} from './ui.js';
 import { tratarCatalogo, Serie, criarContador } from './modelo.js';
 
 // RF11: contador por closure (vive enquanto a página estiver aberta)
@@ -51,6 +58,15 @@ async function buscarCatalogoSeries() {
         `;
         return [];
     }
+}
+
+// ==========================================
+// RF10: Callback
+// Recebe outra função (callback) e a executa no momento certo do fluxo,
+// mesmo padrão do executarCallbackOnboarding do CineMatch JS original
+// ==========================================
+function executarCallbackOnboarding(nome, callback) {
+    callback(nome);
 }
 
 // ==========================================
@@ -150,6 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
             tituloResultados.textContent = `Recomendado pra você, ${usuario.nome}`;
         }
 
+        limparMensagemBoasVindas(); // evita mostrar o nome do perfil anterior durante o carregamento
+
         catalogo = await buscarCatalogoSeries();
         if (catalogo.length === 0) {
             return;
@@ -163,5 +181,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // RF11: incrementa o contador (closure) e mostra na tela
         exibirContador(contadorRecalculos.incrementar());
+
+        // RF10: callback disparado só depois que a busca terminou e os cards foram renderizados
+        executarCallbackOnboarding(usuario.nome, exibirMensagemDeBoasVindas);
     }
 });
