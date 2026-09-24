@@ -1,6 +1,6 @@
 // script.js - Lógica principal (Formulário, LocalStorage, Fetch, Cálculo e Orquestração)
 
-import { exibirErro, limparErro, exibirContador } from './ui.js';
+import { exibirErro, limparErro, exibirContador, renderizarResultados } from './ui.js';
 import { tratarCatalogo, Serie, criarContador } from './modelo.js';
 
 // RF11: contador por closure (vive enquanto a página estiver aberta)
@@ -69,6 +69,7 @@ function calcularRecomendacoes(catalogoTratado, usuario) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    const main = document.querySelector("main");
     const formPerfil = document.querySelector("#form-perfil");
     const telaPerfil = document.querySelector("#tela-perfil");
     const telaResultados = document.querySelector("#tela-resultados");
@@ -131,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnVoltar.addEventListener("click", () => {
             localStorage.removeItem("cinematchPerfil");
             limparErro();
+            main.classList.remove("main-largo");
             telaResultados.classList.add("oculto");
             telaPerfil.classList.remove("oculto");
             formPerfil.reset();
@@ -141,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function mostrarResultados(usuario) {
         telaPerfil.classList.add("oculto");
         telaResultados.classList.remove("oculto");
+        main.classList.add("main-largo"); // cards precisam de mais largura que o formulário
 
         const tituloResultados = telaResultados.querySelector("h2");
         if (tituloResultados) {
@@ -152,16 +155,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // RF06 + RF07: valida a lógica no console antes de desenhar os cards (RF08)
+        // RF06 + RF07: calcula a compatibilidade
         recomendacoes = calcularRecomendacoes(catalogo, usuario);
-        console.table(recomendacoes.map(r => ({
-            titulo: r.serie.titulo,
-            resumo: r.serie.exibirResumo(),
-            comuns: r.comuns.join(", ") || "-",
-            naoExplorados: r.naoExplorados.join(", ") || "-",
-            percentual: `${r.percentual}%`,
-            classificacao: r.classificacao
-        })));
+
+        // RF08: desenha os cards na tela (substitui o console.table de validação)
+        renderizarResultados(recomendacoes);
 
         // RF11: incrementa o contador (closure) e mostra na tela
         exibirContador(contadorRecalculos.incrementar());
