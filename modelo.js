@@ -15,7 +15,7 @@ const IMAGEM_PADRAO =
         </svg>`
     );
 
-export function tratarCatalogo(dadosBrutos) {
+export function tratarCatalogo(dadosBrutos, limite = 60) {
     if (!Array.isArray(dadosBrutos)) {
         return [];
     }
@@ -27,7 +27,7 @@ export function tratarCatalogo(dadosBrutos) {
             return temNota && temGenero;
         })
         .sort((a, b) => b.rating.average - a.rating.average)
-        .slice(0, 8)
+        .slice(0, limite)
         .map(serie => ({
             id: serie.id,
             titulo: serie.name,

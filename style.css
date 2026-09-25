@@ -213,12 +213,6 @@ fieldset.input-erro {
     text-align: center;
 }
 
-.boas-vindas {
-    font-size: 15px;
-    color: #cccccc;
-    text-align: center;
-}
-
 /* =========================================
    Mensagens de estado do catálogo (RF04/RF05/RF12)
    ========================================= */
@@ -360,6 +354,43 @@ fieldset.input-erro {
 .tag-vazia {
     color: #888888;
     border-style: dashed;
+}
+
+/* =========================================
+   Paginação
+   ========================================= */
+.paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-pagina {
+    /* Menor e secundário, não deve competir com o botão "Ver recomendações" */
+    width: auto;
+    margin-top: 0;
+    padding: 10px 16px;
+    font-size: 14px;
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+}
+
+.btn-pagina:hover:not(:disabled) {
+    background-color: #3a3a3a;
+}
+
+.btn-pagina:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.paginacao-indicador {
+    font-size: 14px;
+    color: #cccccc;
+    white-space: nowrap;
 }
 
 /* =========================================

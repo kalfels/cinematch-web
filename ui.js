@@ -164,12 +164,61 @@ export function renderizarCard(resultado) {
     return card;
 }
 
-// Limpa a área de resultados e desenha todos os cards
-export function renderizarResultados(recomendacoes) {
+// Quantas recomendações aparecem por página
+const ITENS_POR_PAGINA = 8;
+
+// Desenha apenas a "fatia" da página pedida
+export function renderizarPagina(recomendacoes, pagina) {
     const container = document.querySelector("#resultados");
     container.innerHTML = "";
 
-    recomendacoes.forEach(resultado => renderizarCard(resultado));
+    const inicio = (pagina - 1) * ITENS_POR_PAGINA;
+    const fim = inicio + ITENS_POR_PAGINA;
+
+    recomendacoes.slice(inicio, fim).forEach(resultado => renderizarCard(resultado));
+}
+
+// Cria (ou atualiza) os botões Anterior/Próxima e o indicador "Página X de Y"
+// aoTrocarPagina é o callback chamado quando o usuário clica em um botão (RF10-style)
+export function renderizarPaginacao(totalItens, paginaAtual, aoTrocarPagina) {
+    const totalPaginas = Math.max(1, Math.ceil(totalItens / ITENS_POR_PAGINA));
+
+    let nav = document.querySelector("#paginacao");
+    if (!nav) {
+        nav = document.createElement("nav");
+        nav.id = "paginacao";
+        nav.className = "paginacao";
+        nav.setAttribute("aria-label", "Navegação de páginas de recomendações");
+        document.querySelector("#resultados").after(nav);
+    }
+
+    nav.innerHTML = "";
+
+    // Com tudo cabendo em uma página só, não faz sentido mostrar os controles
+    if (totalPaginas <= 1) {
+        return;
+    }
+
+    const btnAnterior = document.createElement("button");
+    btnAnterior.type = "button";
+    btnAnterior.className = "btn-pagina";
+    btnAnterior.textContent = "◀ Anterior";
+    btnAnterior.disabled = paginaAtual === 1;
+    btnAnterior.addEventListener("click", () => aoTrocarPagina(paginaAtual - 1));
+
+    const indicador = document.createElement("span");
+    indicador.className = "paginacao-indicador";
+    indicador.textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+    indicador.setAttribute("aria-live", "polite");
+
+    const btnProxima = document.createElement("button");
+    btnProxima.type = "button";
+    btnProxima.className = "btn-pagina";
+    btnProxima.textContent = "Próxima ▶";
+    btnProxima.disabled = paginaAtual === totalPaginas;
+    btnProxima.addEventListener("click", () => aoTrocarPagina(paginaAtual + 1));
+
+    nav.append(btnAnterior, indicador, btnProxima);
 }
 
 // =========================================================================

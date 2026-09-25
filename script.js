@@ -4,7 +4,8 @@ import {
     exibirErro,
     limparErro,
     exibirContador,
-    renderizarResultados,
+    renderizarPagina,
+    renderizarPaginacao,
     exibirMensagemDeBoasVindas,
     limparMensagemBoasVindas
 } from './ui.js';
@@ -16,6 +17,12 @@ const contadorRecalculos = criarContador();
 // Guarda o catálogo tratado e as recomendações calculadas (usados no RF08)
 let catalogo = [];
 let recomendacoes = [];
+let paginaAtual = 1;
+
+// Quantas páginas da TVMaze buscar (cada uma tem até 250 séries).
+// A API responde com status de erro quando a página não existe, e isso já
+// é tratado abaixo como "página indisponível" (Promise.allSettled + response.ok)
+const TOTAL_PAGINAS_API = 4;
 
 // ==========================================
 // RF04, RF05 & RF12: Consumo da API TVMaze via Fetch
@@ -29,13 +36,43 @@ async function buscarCatalogoSeries() {
 
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        const resposta = await fetch('https://api.tvmaze.com/shows?page=0');
+        // Busca várias páginas da TVMaze em paralelo. Promise.allSettled garante que,
+        // se uma página falhar (rede ou 404 de página inexistente), as outras ainda
+        // sejam aproveitadas, em vez de derrubar a busca inteira
+        const numerosPagina = Array.from({ length: TOTAL_PAGINAS_API }, (_, indice) => indice);
+        const resultadosPaginas = await Promise.allSettled(
+            numerosPagina.map(pagina => fetch(`https://api.tvmaze.com/shows?page=${pagina}`))
+        );
 
-        if (!resposta.ok) {
-            throw new Error(`Erro na API: ${resposta.status}`);
+        let dadosBrutos = [];
+        let algumaPaginaOk = false;
+
+        for (const resultado of resultadosPaginas) {
+            if (resultado.status !== "fulfilled") {
+                console.warn("Falha de rede ao buscar uma página da API:", resultado.reason);
+                continue;
+            }
+
+            const resposta = resultado.value;
+            if (!resposta.ok) {
+                console.warn(`Página indisponível (status ${resposta.status}), pulando.`);
+                continue;
+            }
+
+            const dadosPagina = await resposta.json();
+            if (Array.isArray(dadosPagina) && dadosPagina.length > 0) {
+                dadosBrutos = dadosBrutos.concat(dadosPagina);
+                algumaPaginaOk = true;
+            }
         }
 
-        const dadosBrutos = await resposta.json();
+        // Se NENHUMA página respondeu, trata como falha real da API (cai no catch)
+        if (!algumaPaginaOk) {
+            throw new Error("Nenhuma página da API respondeu corretamente.");
+        }
+
+        console.log(`Catálogo bruto: ${dadosBrutos.length} séries recebidas de ${TOTAL_PAGINAS_API} página(s).`);
+
         const catalogoTratado = tratarCatalogo(dadosBrutos);
         console.log("Catálogo tratado com sucesso:", catalogoTratado);
 
@@ -67,6 +104,18 @@ async function buscarCatalogoSeries() {
 // ==========================================
 function executarCallbackOnboarding(nome, callback) {
     callback(nome);
+}
+
+// ==========================================
+// Paginação: desenha uma página específica das recomendações já calculadas
+// ==========================================
+function exibirPagina(pagina) {
+    paginaAtual = pagina;
+    renderizarPagina(recomendacoes, paginaAtual);
+    renderizarPaginacao(recomendacoes.length, paginaAtual, exibirPagina);
+
+    // Leva o usuário de volta ao topo dos resultados ao trocar de página
+    document.querySelector("#tela-resultados").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 // ==========================================
@@ -173,11 +222,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // RF06 + RF07: calcula a compatibilidade
+        // RF06 + RF07: calcula a compatibilidade para o catálogo inteiro
         recomendacoes = calcularRecomendacoes(catalogo, usuario);
 
-        // RF08: desenha os cards na tela (substitui o console.table de validação)
-        renderizarResultados(recomendacoes);
+        // Paginação: sempre começa na página 1 a cada novo cálculo
+        exibirPagina(1);
 
         // RF11: incrementa o contador (closure) e mostra na tela
         exibirContador(contadorRecalculos.incrementar());
