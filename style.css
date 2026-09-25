@@ -1,4 +1,58 @@
 /* =========================================
+   Variáveis de tema (RF opcional: dark/light mode)
+   Padrão é o tema escuro; o [data-theme="light"] no <html>
+   sobrescreve as mesmas variáveis com tons claros
+   ========================================= */
+:root,
+:root[data-theme="dark"] {
+    --bg-pagina: #121212;
+    --bg-main: #1e1e1e;
+    --bg-elevado: #2b2b2b;
+    --bg-elevado-hover: #3a3a3a;
+
+    --texto-titulo: #ffffff;
+    --texto-principal: #f5f5f5;
+    --texto-secundario: #888888;
+    --texto-terciario: #cccccc;
+    --texto-info: #aaaaaa;
+
+    --borda: #333333;
+    --borda-forte: #444444;
+
+    --acento: #e50914;
+    --acento-hover: #b20710;
+
+    --tag-comum-borda: #2e7d32;
+    --tag-comum-texto: #a5d6a7;
+
+    --sombra: rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+    --bg-pagina: #f2f2f2;
+    --bg-main: #ffffff;
+    --bg-elevado: #eeeeee;
+    --bg-elevado-hover: #e2e2e2;
+
+    --texto-titulo: #111111;
+    --texto-principal: #1a1a1a;
+    --texto-secundario: #666666;
+    --texto-terciario: #444444;
+    --texto-info: #555555;
+
+    --borda: #dddddd;
+    --borda-forte: #cccccc;
+
+    --acento: #e50914;
+    --acento-hover: #b20710;
+
+    --tag-comum-borda: #2e7d32;
+    --tag-comum-texto: #1b5e20; /* verde mais escuro: contraste melhor em fundo claro */
+
+    --sombra: rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================
    Reset e Configuração Geral
    ========================================= */
 * {
@@ -9,18 +63,19 @@
 }
 
 body {
-    background-color: #121212; /* Fundo escuro padrão */
-    color: #f5f5f5; /* Texto claro */
+    background-color: var(--bg-pagina);
+    color: var(--texto-principal);
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Foco visível para navegação por teclado (acessibilidade, RF13) */
 :focus-visible {
-    outline: 2px solid #ffffff;
+    outline: 2px solid var(--texto-titulo);
     outline-offset: 2px;
 }
 
@@ -28,6 +83,9 @@ body {
    Cabeçalho e Rodapé
    ========================================= */
 header {
+    position: relative; /* ancora o botão de tema no canto */
+    width: 100%;
+    max-width: 1100px;
     margin-bottom: 30px;
     text-align: center;
 }
@@ -48,11 +106,35 @@ header {
     display: block;
 }
 
+/* Botão de alternância de tema */
+.btn-tema {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    margin-top: 0;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--bg-elevado);
+    border: 1px solid var(--borda-forte);
+    color: var(--texto-principal);
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-tema:hover {
+    background-color: var(--bg-elevado-hover);
+}
+
 footer {
     margin-top: auto; /* Empurra o rodapé pro final da página */
     padding-top: 40px;
     font-size: 14px;
-    color: #888888;
+    color: var(--texto-secundario);
 }
 
 /* =========================================
@@ -61,10 +143,11 @@ footer {
 main {
     width: 100%;
     max-width: 600px; /* Largura do formulário */
-    background-color: #1e1e1e; /* Fundo do card um pouco mais claro que o body */
+    background-color: var(--bg-main);
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 10px var(--sombra);
+    transition: background-color 0.2s ease, max-width 0.2s ease;
 }
 
 /* Na tela de resultados o container fica mais largo para caber os cards */
@@ -75,7 +158,7 @@ main.main-largo {
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #ffffff;
+    color: var(--texto-titulo);
 }
 
 /* Esconde uma tela (sem !important: nenhuma regra de ID força display nela) */
@@ -107,23 +190,23 @@ input[type="text"],
 input[type="number"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #333333;
+    border: 1px solid var(--borda);
     border-radius: 5px;
-    background-color: #2b2b2b;
-    color: #ffffff;
+    background-color: var(--bg-elevado);
+    color: var(--texto-principal);
     font-size: 16px;
 }
 
-/* Borda vermelha ao focar (o contorno branco vem da regra :focus-visible) */
+/* Borda vermelha ao focar (o contorno branco/escuro vem da regra :focus-visible) */
 input:focus {
-    border-color: #e50914;
+    border-color: var(--acento);
 }
 
 /* =========================================
    Gêneros (Checkboxes)
    ========================================= */
 fieldset {
-    border: 1px solid #333333;
+    border: 1px solid var(--borda);
     border-radius: 5px;
     padding: 15px;
     /* Começa em coluna (mobile-first) */
@@ -135,7 +218,7 @@ fieldset {
 legend {
     padding: 0 10px;
     font-weight: bold;
-    color: #cccccc;
+    color: var(--texto-terciario);
 }
 
 fieldset label {
@@ -150,7 +233,7 @@ fieldset label {
    Botões
    ========================================= */
 button {
-    background-color: #e50914;
+    background-color: var(--acento);
     color: #ffffff;
     border: none;
     padding: 15px;
@@ -162,21 +245,23 @@ button {
 }
 
 button:hover {
-    background-color: #b20710;
+    background-color: var(--acento-hover);
 }
 
 /* =========================================
-   Erros do formulário (borda branca no campo)
+   Erros do formulário
+   A borda usa a cor de acento (vermelho) em vez de branco fixo, então
+   funciona em qualquer tema sem precisar de uma variável exclusiva.
    Vem DEPOIS de input[type=...] e fieldset, com mesma especificidade,
    por isso vence sem precisar de !important
    ========================================= */
 input.input-erro,
 fieldset.input-erro {
-    border: 1px solid #ffffff;
+    border: 2px solid var(--acento);
 }
 
 .mensagem-erro {
-    background-color: #e50914;
+    background-color: var(--acento);
     color: #ffffff;
     padding: 12px;
     border-radius: 5px;
@@ -200,16 +285,22 @@ fieldset.input-erro {
 #btn-voltar {
     width: 100%;
     max-width: 250px;
-    background-color: #e50914;
+    background-color: var(--acento);
 }
 
 #btn-voltar:hover {
-    background-color: #555555;
+    background-color: var(--acento-hover);
 }
 
 .contador {
     font-size: 13px;
-    color: #888888;
+    color: var(--texto-secundario);
+    text-align: center;
+}
+
+.boas-vindas {
+    font-size: 15px;
+    color: var(--texto-terciario);
     text-align: center;
 }
 
@@ -227,14 +318,14 @@ fieldset.input-erro {
 
 /* Carregando e vazio: tom neutro */
 .aviso-msg {
-    background-color: #2b2b2b;
-    color: #cccccc;
-    border: 1px solid #333333;
+    background-color: var(--bg-elevado);
+    color: var(--texto-terciario);
+    border: 1px solid var(--borda);
 }
 
 /* Erro: vermelho, igual ao .mensagem-erro do formulário */
 .erro-msg {
-    background-color: #e50914;
+    background-color: var(--acento);
     color: #ffffff;
     font-weight: bold;
 }
@@ -253,8 +344,8 @@ fieldset.input-erro {
 .card-serie {
     display: flex;
     flex-direction: column;
-    background-color: #2b2b2b;
-    border: 1px solid #333333;
+    background-color: var(--bg-elevado);
+    border: 1px solid var(--borda);
     border-radius: 8px;
     overflow: hidden;
 }
@@ -264,7 +355,7 @@ fieldset.input-erro {
     width: 100%;
     height: 260px;
     object-fit: cover;
-    background-color: #1e1e1e;
+    background-color: var(--bg-main);
 }
 
 .card-corpo {
@@ -277,12 +368,12 @@ fieldset.input-erro {
 
 .card-titulo {
     font-size: 18px;
-    color: #ffffff;
+    color: var(--texto-titulo);
 }
 
 .card-info {
     font-size: 13px;
-    color: #aaaaaa;
+    color: var(--texto-info);
 }
 
 .card-compat {
@@ -290,7 +381,8 @@ fieldset.input-erro {
     font-weight: bold;
 }
 
-/* Badges de afinidade (o texto sempre aparece, não depende só da cor) */
+/* Badges de afinidade: cores fixas (semânticas), iguais nos dois temas,
+   já que o texto sempre aparece e não depende só da cor */
 .badge {
     display: inline-block;
     padding: 4px 10px;
@@ -310,7 +402,7 @@ fieldset.input-erro {
 }
 
 .badge.Baixa {
-    background-color: #555555;
+    background-color: #6b6b6b;
     color: #ffffff;
 }
 
@@ -324,7 +416,7 @@ fieldset.input-erro {
 .card-generos-titulo {
     font-size: 12px;
     font-weight: bold;
-    color: #cccccc;
+    color: var(--texto-terciario);
 }
 
 .lista-generos {
@@ -338,21 +430,21 @@ fieldset.input-erro {
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 12px;
-    background-color: #1e1e1e;
-    border: 1px solid #444444;
+    background-color: var(--bg-main);
+    border: 1px solid var(--borda-forte);
 }
 
 .tag-comum {
-    border-color: #2e7d32;
-    color: #a5d6a7;
+    border-color: var(--tag-comum-borda);
+    color: var(--tag-comum-texto);
 }
 
 .tag-nao-explorado {
-    color: #cccccc;
+    color: var(--texto-terciario);
 }
 
 .tag-vazia {
-    color: #888888;
+    color: var(--texto-secundario);
     border-style: dashed;
 }
 
@@ -374,12 +466,13 @@ fieldset.input-erro {
     margin-top: 0;
     padding: 10px 16px;
     font-size: 14px;
-    background-color: #2b2b2b;
-    border: 1px solid #444444;
+    background-color: var(--bg-elevado);
+    color: var(--texto-principal);
+    border: 1px solid var(--borda-forte);
 }
 
 .btn-pagina:hover:not(:disabled) {
-    background-color: #3a3a3a;
+    background-color: var(--bg-elevado-hover);
 }
 
 .btn-pagina:disabled {
@@ -389,7 +482,7 @@ fieldset.input-erro {
 
 .paginacao-indicador {
     font-size: 14px;
-    color: #cccccc;
+    color: var(--texto-terciario);
     white-space: nowrap;
 }
 

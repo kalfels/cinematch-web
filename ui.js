@@ -39,6 +39,26 @@ export function limparErro() {
 }
 
 // =========================================================================
+// Melhoria opcional: tema dark/light
+// =========================================================================
+
+// Atualiza o ícone e o aria-label do botão conforme o tema ativo
+export function atualizarBotaoTema(tema) {
+    const botao = document.querySelector("#btn-tema");
+    if (!botao) {
+        return;
+    }
+
+    if (tema === "light") {
+        botao.textContent = "☀️";
+        botao.setAttribute("aria-label", "Alternar para tema escuro");
+    } else {
+        botao.textContent = "🌙";
+        botao.setAttribute("aria-label", "Alternar para tema claro");
+    }
+}
+
+// =========================================================================
 // RF11: contador de recálculos
 // =========================================================================
 

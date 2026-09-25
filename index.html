@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+        Aplica o tema salvo (ou "dark" por padrão) antes do CSS ser processado,
+        para não piscar no tema errado por uma fração de segundo ao carregar
+    -->
+    <script>
+        (function () {
+            var temaSalvo = localStorage.getItem("cinematchTema");
+            var tema = temaSalvo === "light" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", tema);
+        })();
+    </script>
     <title>CineMatch Web | Recomendação de Séries</title>
     <meta name="description" content="Descubra sua próxima série favorita com o motor de recomendação em tempo real do CineMatch.">
     <!-- Tags Open Graph (OG) para Redes Sociais -->
@@ -10,11 +21,12 @@
     <meta property="og:description" content="Descubra sua próxima série favorita com o motor de recomendação em tempo real do CineMatch.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kalfels.github.io/cinematch-web/">
-    <meta property="og:image" content="https://dummyimage.com/1200x630/2e2c2e/c20606.png?text=CineMatch+Web">
+    <meta property="og:image" content="https://dummyimage.com/1200x630/2e2c2e/c20606.png&text=CineMatch+Web">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
+        <button id="btn-tema" class="btn-tema" type="button" aria-label="Alternar para tema claro">🌙</button>
         <h1 class="logo">
             <img src="assets/logotipo.png" alt="CineMatch Web. Recomendação de Séries em Tempo Real - Página Inicial" class="logo-img">
         </h1>

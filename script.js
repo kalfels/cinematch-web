@@ -7,7 +7,8 @@ import {
     renderizarPagina,
     renderizarPaginacao,
     exibirMensagemDeBoasVindas,
-    limparMensagemBoasVindas
+    limparMensagemBoasVindas,
+    atualizarBotaoTema
 } from './ui.js';
 import { tratarCatalogo, Serie, criarContador } from './modelo.js';
 
@@ -132,7 +133,34 @@ function calcularRecomendacoes(catalogoTratado, usuario) {
         .sort((a, b) => b.percentual - a.percentual || b.serie.nota - a.serie.nota);
 }
 
+// ==========================================
+// Melhoria opcional: tema dark/light com persistência em localStorage
+// (o <html> já recebe data-theme antes do carregamento via script no <head>,
+// isso aqui cuida só da alternância pelo clique no botão)
+// ==========================================
+const CHAVE_TEMA = "cinematchTema";
+
+function aplicarTema(tema) {
+    document.documentElement.setAttribute("data-theme", tema);
+    localStorage.setItem(CHAVE_TEMA, tema);
+    atualizarBotaoTema(tema);
+}
+
+function alternarTema() {
+    const temaAtual = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    aplicarTema(temaAtual === "dark" ? "light" : "dark");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+
+    // Sincroniza o ícone do botão com o tema já aplicado pelo script do <head>
+    const temaAtivo = document.documentElement.getAttribute("data-theme") || "dark";
+    atualizarBotaoTema(temaAtivo);
+
+    const botaoTema = document.querySelector("#btn-tema");
+    if (botaoTema) {
+        botaoTema.addEventListener("click", alternarTema);
+    }
 
     const main = document.querySelector("main");
     const formPerfil = document.querySelector("#form-perfil");
