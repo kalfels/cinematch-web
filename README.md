@@ -86,3 +86,9 @@ melhorias opcionais
 - cores convertidas em variáveis CSS (--bg-pagina, --texto-principal, --acento, etc.), redefinidas em :root[data-theme="light"]
 - badges de afinidade mantidos com cores fixas nos dois temas, por serem cores semânticas (sucesso/atenção/neutro)
 - testado: alternância, persistência após F5, e contraste de texto no tema claro
+
+- melhoria opcional: tela de loading com a logo centralizada, fundo desfocado (backdrop-filter) e efeito sonoro, exibida só ao enviar o formulário ou ao carregar automaticamente com perfil salvo
+- ao terminar a busca, a logo anima subindo e desaparecendo, revelando os cards, o aviso de vazio ou a mensagem de erro
+- overlay marcado com aria-hidden, e a área de resultados com aria-live="polite", para quem usa leitor de tela receber o status real em vez do efeito visual
+- animação desativada para quem usa prefers-reduced-motion, por acessibilidade
+- som tocado com try/catch, sem travar a aplicação caso o navegador bloqueie áudio automático
