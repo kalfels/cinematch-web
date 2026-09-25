@@ -72,3 +72,11 @@ feat: adiciona estrutura inicial do html e css
 - executarCallbackOnboarding(nome, callback) em script.js recebe a função como parâmetro e a executa, no mesmo padrão do CineMatch JS original
 - o callback é disparado somente depois que a busca na API terminou e os cards foram renderizados; se a busca falhar ou vier vazia, ele não é chamado
 - a mensagem usa role="status" para ser anunciada por leitores de tela e é removida ao começar uma nova busca, para não mostrar o nome do perfil anterior
+
+melhorias opcionais
+
+- melhoria opcional: buscadas 4 páginas da TVMaze (page=0 a page=3) em paralelo com Promise.allSettled, ampliando o catálogo de ~250 para ~1000 séries antes do tratamento
+- Promise.allSettled evita que a falha de uma página derrube as outras; só é tratado como erro se nenhuma página responder
+- tratarCatalogo() agora aceita um parâmetro de limite (padrão 60), no lugar do corte fixo em 8
+- implementada paginação nos resultados: 8 recomendações por página, com botões Anterior/Próxima e indicador "Página X de Y"
+- a paginação reinicia na página 1 a cada novo perfil, e os controles somem quando tudo cabe em uma página só
