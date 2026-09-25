@@ -63,7 +63,7 @@
         <section id="tela-resultados" class="oculto">
             <h2>Recomendado pra você</h2>
 
-            <div id="resultados"></div>
+            <div id="resultados" aria-live="polite"></div>
 
             <p id="contador-recalculos" class="contador" aria-live="polite"></p>
 
@@ -74,6 +74,16 @@
     <footer>
         <small>&copy; 2026 CineMatch Web. Projeto Avaliativo SCTEC SENAI.</small>
     </footer>
+
+    <!--
+        Overlay de loading (melhoria opcional): logo centralizada com o fundo
+        desfocado, exibida só enquanto o catálogo é buscado na API.
+        aria-hidden porque é só decorativo; quem usa leitor de tela já recebe
+        o status real pelo aria-live em #resultados.
+    -->
+    <div id="tela-loading" class="tela-loading oculto" aria-hidden="true">
+        <img src="assets/logotipo.png" alt="" class="tela-loading-logo">
+    </div>
 
     <script type="module" src="script.js"></script>
 </body>

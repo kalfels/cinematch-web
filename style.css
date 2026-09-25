@@ -25,6 +25,8 @@
     --tag-comum-borda: #2e7d32;
     --tag-comum-texto: #a5d6a7;
 
+    --overlay-loading: rgba(0, 0, 0, 0.55);
+
     --sombra: rgba(0, 0, 0, 0.5);
 }
 
@@ -48,6 +50,8 @@
 
     --tag-comum-borda: #2e7d32;
     --tag-comum-texto: #1b5e20; /* verde mais escuro: contraste melhor em fundo claro */
+
+    --overlay-loading: rgba(255, 255, 255, 0.65);
 
     --sombra: rgba(0, 0, 0, 0.15);
 }
@@ -522,5 +526,77 @@ fieldset.input-erro {
 
     .card-serie {
         flex: 0 0 calc(33.333% - 14px);
+    }
+}
+
+/* =========================================
+   Tela de loading (melhoria opcional)
+   Logo centralizada, fundo desfocado; ao terminar, ela "sobe" e desaparece
+   ========================================= */
+.tela-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--overlay-loading);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.tela-loading.oculto {
+    display: none;
+}
+
+.tela-loading-logo {
+    width: 220px;
+    max-width: 60vw;
+    animation: logoPulsando 1.2s ease-in-out infinite;
+}
+
+@keyframes logoPulsando {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+/* Classe adicionada por JS quando o catálogo termina de carregar:
+   o fundo desfoca menos e clareia, e a logo "voa" até perto do header */
+.tela-loading.saindo {
+    animation: telaLoadingSaida 0.6s ease forwards;
+}
+
+.tela-loading.saindo .tela-loading-logo {
+    animation: logoSubindo 0.6s ease forwards;
+}
+
+@keyframes telaLoadingSaida {
+    from {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    to {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+}
+
+@keyframes logoSubindo {
+    from { transform: translateY(0) scale(1); }
+    to   { transform: translateY(-40vh) scale(0.55); }
+}
+
+/* Quem prefere menos movimento não recebe a animação de "voar" */
+@media (prefers-reduced-motion: reduce) {
+    .tela-loading-logo {
+        animation: none;
+    }
+
+    .tela-loading.saindo,
+    .tela-loading.saindo .tela-loading-logo {
+        animation: none;
+        opacity: 0;
     }
 }

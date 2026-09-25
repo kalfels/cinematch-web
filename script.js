@@ -120,6 +120,54 @@ function exibirPagina(pagina) {
 }
 
 // ==========================================
+// Melhoria opcional: tela de loading com logo animada e som
+// Aparece só nos dois momentos em que o catálogo é buscado: envio do
+// formulário e carregamento automático com perfil já salvo (RF03)
+// ==========================================
+function exibirTelaLoading() {
+    const overlay = document.querySelector("#tela-loading");
+    if (!overlay) {
+        return;
+    }
+
+    overlay.classList.remove("oculto", "saindo");
+    tocarSomLoading();
+}
+
+function esconderTelaLoading() {
+    const overlay = document.querySelector("#tela-loading");
+    if (!overlay) {
+        return;
+    }
+
+    overlay.classList.add("saindo");
+
+    // Só esconde de vez (display: none) depois da animação terminar,
+    // pra logo dar tempo de "subir" e sumir suavemente
+    overlay.addEventListener("animationend", function aoTerminarSaida() {
+        overlay.classList.add("oculto");
+        overlay.classList.remove("saindo");
+        overlay.removeEventListener("animationend", aoTerminarSaida);
+    }, { once: true });
+}
+
+function tocarSomLoading() {
+    try {
+        const som = new Audio("assets/som-loading.mp3");
+        som.volume = 0.5;
+
+        // Alguns navegadores bloqueiam áudio automático antes de qualquer
+        // interação do usuário. Isso não pode travar a aplicação, então
+        // qualquer falha aqui só cai num aviso no console.
+        som.play().catch(erro => {
+            console.warn("Som de loading não pôde ser reproduzido:", erro);
+        });
+    } catch (erro) {
+        console.warn("Não foi possível carregar o som de loading:", erro);
+    }
+}
+
+// ==========================================
 // RF06 & RF07: Instancia as séries e calcula a compatibilidade
 // ==========================================
 function calcularRecomendacoes(catalogoTratado, usuario) {
@@ -245,7 +293,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         limparMensagemBoasVindas(); // evita mostrar o nome do perfil anterior durante o carregamento
 
+        exibirTelaLoading();
         catalogo = await buscarCatalogoSeries();
+        esconderTelaLoading();
+
         if (catalogo.length === 0) {
             return;
         }
