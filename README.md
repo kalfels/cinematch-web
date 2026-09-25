@@ -80,3 +80,9 @@ melhorias opcionais
 - tratarCatalogo() agora aceita um parâmetro de limite (padrão 60), no lugar do corte fixo em 8
 - implementada paginação nos resultados: 8 recomendações por página, com botões Anterior/Próxima e indicador "Página X de Y"
 - a paginação reinicia na página 1 a cada novo perfil, e os controles somem quando tudo cabe em uma página só
+
+- melhoria opcional: alternância de tema dark/light, com o botão no header (🌙/☀️)
+- tema salvo no localStorage (cinematchTema) e aplicado por um script inline no <head>, antes do CSS renderizar, para não piscar no tema errado ao carregar
+- cores convertidas em variáveis CSS (--bg-pagina, --texto-principal, --acento, etc.), redefinidas em :root[data-theme="light"]
+- badges de afinidade mantidos com cores fixas nos dois temas, por serem cores semânticas (sucesso/atenção/neutro)
+- testado: alternância, persistência após F5, e contraste de texto no tema claro
