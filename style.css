@@ -206,6 +206,13 @@ input:focus {
     border-color: var(--acento);
 }
 
+/* Placeholder com contraste garantido nos dois temas (o padrão do navegador
+   costuma ser claro demais no tema escuro, ou opaco demais no Firefox) */
+input::placeholder {
+    color: var(--texto-info);
+    opacity: 1;
+}
+
 /* =========================================
    Gêneros (Checkboxes)
    ========================================= */

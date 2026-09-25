@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const inputNome = document.querySelector("#nome");
     const inputIdade = document.querySelector("#idade");
-    const fieldsetGeneros = document.querySelector("fieldset");
+    const fieldsetGeneros = document.querySelector("#fieldset-generos");
 
     // RF03: carrega o perfil salvo (trata null e JSON inválido)
     const perfilSalvo = localStorage.getItem("cinematchPerfil");

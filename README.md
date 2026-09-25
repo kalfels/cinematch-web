@@ -100,3 +100,7 @@ melhorias opcionais
 - fallback para os 5 gêneros fixos originais se a busca falhar, sem quebrar o formulário
 - botão "Ver recomendações" nasce desabilitado e só libera depois que os checkboxes existem (sucesso ou fallback)
 - testado com a API bloqueada de propósito, confirmando o fallback
+
+- revisão final de acessibilidade: aria-invalid e aria-describedby nos campos com erro, ligando o input à mensagem
+- contraste do placeholder dos inputs ajustado (o padrão do navegador tinha contraste insuficiente no tema escuro)
+- revisão de SEO confirmada: title, meta description, OG tags, hierarquia de headings (h1 único, h2 e h3) e um fieldset/legend por grupo de checkboxes

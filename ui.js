@@ -46,6 +46,7 @@ export function exibirErro(mensagem, campoComErro = null) {
 
     const divErro = document.createElement("div");
     divErro.className = "mensagem-erro";
+    divErro.id = "erro-formulario";
     divErro.setAttribute("role", "alert"); // leitores de tela anunciam o erro
     divErro.textContent = mensagem;
 
@@ -53,6 +54,9 @@ export function exibirErro(mensagem, campoComErro = null) {
 
     if (campoComErro) {
         campoComErro.classList.add("input-erro");
+        campoComErro.setAttribute("aria-invalid", "true");
+        campoComErro.setAttribute("aria-describedby", "erro-formulario");
+
         // fieldset só recebe foco com tabindex
         if (campoComErro.tagName === "FIELDSET" && !campoComErro.hasAttribute("tabindex")) {
             campoComErro.setAttribute("tabindex", "-1");
@@ -70,6 +74,8 @@ export function limparErro() {
     const camposComErro = document.querySelectorAll(".input-erro");
     camposComErro.forEach(campo => {
         campo.classList.remove("input-erro");
+        campo.removeAttribute("aria-invalid");
+        campo.removeAttribute("aria-describedby");
     });
 }
 
