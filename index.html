@@ -47,16 +47,12 @@
                     <input type="number" id="idade" min="1" placeholder="Ex: 28" required>
                 </div>
 
-                <fieldset>
+                <fieldset id="fieldset-generos">
                     <legend>Gêneros favoritos</legend>
-                    <label><input type="checkbox" name="genero" value="Drama"> Drama</label>
-                    <label><input type="checkbox" name="genero" value="Comedy"> Comédia</label>
-                    <label><input type="checkbox" name="genero" value="Action"> Ação</label>
-                    <label><input type="checkbox" name="genero" value="Horror"> Terror</label>
-                    <label><input type="checkbox" name="genero" value="Science-Fiction"> Ficção Científica</label>
+                    <p class="generos-status">Carregando gêneros...</p>
                 </fieldset>
 
-                <button type="submit">Ver recomendações</button>
+                <button type="submit" id="btn-enviar" disabled>Ver recomendações</button>
             </form>
         </section>
 

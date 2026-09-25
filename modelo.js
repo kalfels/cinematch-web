@@ -40,6 +40,37 @@ export function tratarCatalogo(dadosBrutos, limite = 60) {
 }
 
 // =========================================================================
+// Melhoria opcional: extrai os N gêneros mais frequentes do catálogo,
+// para montar o formulário dinamicamente em vez de uma lista fixa
+// =========================================================================
+export function extrairGenerosFrequentes(dadosBrutos, quantidade = 10) {
+    if (!Array.isArray(dadosBrutos)) {
+        return [];
+    }
+
+    // REDUCE: conta quantas séries têm cada gênero
+    const contagemPorGenero = dadosBrutos.reduce((contagem, serie) => {
+        if (!Array.isArray(serie.genres)) {
+            return contagem;
+        }
+
+        for (const genero of serie.genres) {
+            contagem[genero] = (contagem[genero] || 0) + 1;
+        }
+
+        return contagem;
+    }, {});
+
+    // SORT: do gênero mais frequente para o menos frequente
+    return Object.entries(contagemPorGenero)
+        .sort((a, b) => b[1] - a[1])
+        // SLICE: mantém só os N mais frequentes
+        .slice(0, quantidade)
+        // MAP: descarta a contagem, mantém só o nome do gênero
+        .map(([genero]) => genero);
+}
+
+// =========================================================================
 // RF06: Classes com herança e this
 // =========================================================================
 

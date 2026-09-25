@@ -252,6 +252,17 @@ button:hover {
     background-color: var(--acento-hover);
 }
 
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.generos-status {
+    font-size: 14px;
+    color: var(--texto-terciario);
+    font-weight: normal;
+}
+
 /* =========================================
    Erros do formulário
    A borda usa a cor de acento (vermelho) em vez de branco fixo, então

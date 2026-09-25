@@ -8,9 +8,10 @@ import {
     renderizarPaginacao,
     exibirMensagemDeBoasVindas,
     limparMensagemBoasVindas,
-    atualizarBotaoTema
+    atualizarBotaoTema,
+    renderizarCheckboxesGeneros
 } from './ui.js';
-import { tratarCatalogo, Serie, criarContador } from './modelo.js';
+import { tratarCatalogo, Serie, criarContador, extrairGenerosFrequentes } from './modelo.js';
 
 // RF11: contador por closure (vive enquanto a página estiver aberta)
 const contadorRecalculos = criarContador();
@@ -120,6 +121,49 @@ function exibirPagina(pagina) {
 }
 
 // ==========================================
+// Melhoria opcional: gêneros do formulário vindos da API
+// Busca separada e leve (só page=0), independente da busca completa
+// do catálogo (RF04), que só acontece depois do envio do formulário
+// ==========================================
+const GENEROS_PADRAO = ["Drama", "Comedy", "Action", "Horror", "Science-Fiction"];
+const QUANTIDADE_GENEROS_FORMULARIO = 10;
+
+async function carregarGenerosFormulario() {
+    const botaoEnviar = document.querySelector("#btn-enviar");
+
+    try {
+        const resposta = await fetch('https://api.tvmaze.com/shows?page=0');
+
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar gêneros: ${resposta.status}`);
+        }
+
+        const dadosBrutos = await resposta.json();
+        const generos = extrairGenerosFrequentes(dadosBrutos, QUANTIDADE_GENEROS_FORMULARIO);
+
+        if (generos.length === 0) {
+            throw new Error("Nenhum gênero encontrado nos dados da API.");
+        }
+
+        renderizarCheckboxesGeneros(generos);
+        console.log(`Gêneros carregados da API (${generos.length}):`, generos);
+
+    } catch (erro) {
+        // Fallback: se a busca falhar, o formulário não fica quebrado,
+        // só volta a usar os gêneros fixos originais
+        console.warn("Não foi possível carregar gêneros da API, usando lista padrão:", erro);
+        renderizarCheckboxesGeneros(GENEROS_PADRAO);
+
+    } finally {
+        // Libera o envio do formulário só depois que os checkboxes existem,
+        // com sucesso ou com o fallback
+        if (botaoEnviar) {
+            botaoEnviar.disabled = false;
+        }
+    }
+}
+
+// ==========================================
 // Melhoria opcional: tela de loading com logo animada e som
 // Aparece só nos dois momentos em que o catálogo é buscado: envio do
 // formulário e carregamento automático com perfil já salvo (RF03)
@@ -209,6 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (botaoTema) {
         botaoTema.addEventListener("click", alternarTema);
     }
+
+    // Melhoria opcional: popula os checkboxes de gêneros a partir da API
+    carregarGenerosFormulario();
 
     const main = document.querySelector("main");
     const formPerfil = document.querySelector("#form-perfil");

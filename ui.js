@@ -1,6 +1,41 @@
 // ui.js - Manipulação de interface: erros, contador e cards (RF08)
 
 // =========================================================================
+// Melhoria opcional: monta os checkboxes de gêneros dinamicamente
+// (substitui a lista fixa que existia no HTML)
+// =========================================================================
+export function renderizarCheckboxesGeneros(generos) {
+    const fieldset = document.querySelector("#fieldset-generos");
+    if (!fieldset) {
+        return;
+    }
+
+    // Remove tudo, exceto o <legend>, para poder chamar esta função de novo
+    // se precisar (ex.: um botão de "atualizar gêneros" no futuro)
+    fieldset.querySelectorAll(":scope > *:not(legend)").forEach(el => el.remove());
+
+    // Ordena por nome traduzido só para ficar mais fácil de escanear na tela;
+    // os N já foram escolhidos por frequência antes de chegar aqui
+    const generosOrdenados = [...generos].sort((a, b) =>
+        traduzirGenero(a).localeCompare(traduzirGenero(b), "pt-BR")
+    );
+
+    for (const genero of generosOrdenados) {
+        const label = document.createElement("label");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "genero";
+        checkbox.value = genero;
+
+        label.appendChild(checkbox);
+        label.append(` ${traduzirGenero(genero)}`);
+
+        fieldset.appendChild(label);
+    }
+}
+
+// =========================================================================
 // Formulário: mensagens de erro
 // =========================================================================
 
@@ -103,7 +138,7 @@ const TRADUCAO_GENEROS = {
     "Travel": "Viagem"
 };
 
-function traduzirGenero(genero) {
+export function traduzirGenero(genero) {
     return TRADUCAO_GENEROS[genero] || genero;
 }
 
