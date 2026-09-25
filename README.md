@@ -92,3 +92,11 @@ melhorias opcionais
 - overlay marcado com aria-hidden, e a área de resultados com aria-live="polite", para quem usa leitor de tela receber o status real em vez do efeito visual
 - animação desativada para quem usa prefers-reduced-motion, por acessibilidade
 - som tocado com try/catch, sem travar a aplicação caso o navegador bloqueie áudio automático
+
+- melhoria opcional: os gêneros do formulário agora vêm da API TVMaze, em vez de uma lista fixa
+- extrairGenerosFrequentes() em modelo.js usa reduce (para contar), sort (para ordenar por frequência) e slice (para cortar nos 10 mais frequentes)
+- busca leve e separada (só page=0), feita ao carregar a página, independente da busca completa do catálogo (RF04), que só acontece após o envio do formulário
+- checkboxes gerados dinamicamente por renderizarCheckboxesGeneros() em ui.js, reaproveitando a tradução de gêneros já usada nos cards
+- fallback para os 5 gêneros fixos originais se a busca falhar, sem quebrar o formulário
+- botão "Ver recomendações" nasce desabilitado e só libera depois que os checkboxes existem (sucesso ou fallback)
+- testado com a API bloqueada de propósito, confirmando o fallback
