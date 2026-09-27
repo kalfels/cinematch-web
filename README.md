@@ -104,3 +104,7 @@ melhorias opcionais
 - revisão final de acessibilidade: aria-invalid e aria-describedby nos campos com erro, ligando o input à mensagem
 - contraste do placeholder dos inputs ajustado (o padrão do navegador tinha contraste insuficiente no tema escuro)
 - revisão de SEO confirmada: title, meta description, OG tags, hierarquia de headings (h1 único, h2 e h3) e um fieldset/legend por grupo de checkboxes
+
+- ajuste na paginação: 9 recomendações por página no desktop (fecha 3 linhas completas de 3 colunas), mantendo 8 no celular e tablet
+- obterItensPorPagina() usa window.matchMedia no mesmo breakpoint (1024px) do grid de cards
+- a paginação reinicia na página 1 se a janela cruzar esse breakpoint durante a navegação, evitando páginas incompletas
