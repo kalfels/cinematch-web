@@ -6,6 +6,7 @@ import {
     exibirContador,
     renderizarPagina,
     renderizarPaginacao,
+    obterItensPorPagina,
     exibirMensagemDeBoasVindas,
     limparMensagemBoasVindas,
     atualizarBotaoTema,
@@ -20,6 +21,7 @@ const contadorRecalculos = criarContador();
 let catalogo = [];
 let recomendacoes = [];
 let paginaAtual = 1;
+let itensPorPaginaAnterior = null; // detecta quando o breakpoint muda (ex.: redimensionar a janela)
 
 // Quantas páginas da TVMaze buscar (cada uma tem até 250 séries).
 // A API responde com status de erro quando a página não existe, e isso já
@@ -113,12 +115,32 @@ function executarCallbackOnboarding(nome, callback) {
 // ==========================================
 function exibirPagina(pagina) {
     paginaAtual = pagina;
+    itensPorPaginaAnterior = obterItensPorPagina();
     renderizarPagina(recomendacoes, paginaAtual);
     renderizarPaginacao(recomendacoes.length, paginaAtual, exibirPagina);
 
     // Leva o usuário de volta ao topo dos resultados ao trocar de página
     document.querySelector("#tela-resultados").scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
+// Se a janela cruzar o breakpoint do desktop (8 <-> 9 cards por página),
+// reinicia a paginação na página 1 para não deixar uma página incompleta
+// ou "sobrando" na tela. Só reage quando o valor realmente muda (debounce
+// evita recalcular a cada pixel arrastado ao redimensionar).
+let timeoutRedimensionamento;
+window.addEventListener("resize", () => {
+    clearTimeout(timeoutRedimensionamento);
+    timeoutRedimensionamento = setTimeout(() => {
+        if (recomendacoes.length === 0) {
+            return;
+        }
+
+        const itensPorPaginaAtual = obterItensPorPagina();
+        if (itensPorPaginaAtual !== itensPorPaginaAnterior) {
+            exibirPagina(1);
+        }
+    }, 250);
+});
 
 // ==========================================
 // Melhoria opcional: gêneros do formulário vindos da API

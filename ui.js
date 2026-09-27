@@ -225,16 +225,23 @@ export function renderizarCard(resultado) {
     return card;
 }
 
-// Quantas recomendações aparecem por página
-const ITENS_POR_PAGINA = 8;
+// Quantas recomendações aparecem por página.
+// No desktop (3 cards por linha) usamos 9, para fechar 3 linhas cheias;
+// no celular e tablet mantemos 8, que já divide bem em 1 ou 2 colunas.
+const BREAKPOINT_DESKTOP = "(min-width: 1024px)";
+
+export function obterItensPorPagina() {
+    return window.matchMedia(BREAKPOINT_DESKTOP).matches ? 9 : 8;
+}
 
 // Desenha apenas a "fatia" da página pedida
 export function renderizarPagina(recomendacoes, pagina) {
     const container = document.querySelector("#resultados");
     container.innerHTML = "";
 
-    const inicio = (pagina - 1) * ITENS_POR_PAGINA;
-    const fim = inicio + ITENS_POR_PAGINA;
+    const itensPorPagina = obterItensPorPagina();
+    const inicio = (pagina - 1) * itensPorPagina;
+    const fim = inicio + itensPorPagina;
 
     recomendacoes.slice(inicio, fim).forEach(resultado => renderizarCard(resultado));
 }
@@ -242,7 +249,7 @@ export function renderizarPagina(recomendacoes, pagina) {
 // Cria (ou atualiza) os botões Anterior/Próxima e o indicador "Página X de Y"
 // aoTrocarPagina é o callback chamado quando o usuário clica em um botão (RF10-style)
 export function renderizarPaginacao(totalItens, paginaAtual, aoTrocarPagina) {
-    const totalPaginas = Math.max(1, Math.ceil(totalItens / ITENS_POR_PAGINA));
+    const totalPaginas = Math.max(1, Math.ceil(totalItens / obterItensPorPagina()));
 
     let nav = document.querySelector("#paginacao");
     if (!nav) {
