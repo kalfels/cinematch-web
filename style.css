@@ -1,4 +1,62 @@
 /* =========================================
+   Variáveis de tema (RF opcional: dark/light mode)
+   Padrão é o tema escuro; o [data-theme="light"] no <html>
+   sobrescreve as mesmas variáveis com tons claros
+   ========================================= */
+:root,
+:root[data-theme="dark"] {
+    --bg-pagina: #121212;
+    --bg-main: #1e1e1e;
+    --bg-elevado: #2b2b2b;
+    --bg-elevado-hover: #3a3a3a;
+
+    --texto-titulo: #ffffff;
+    --texto-principal: #f5f5f5;
+    --texto-secundario: #888888;
+    --texto-terciario: #cccccc;
+    --texto-info: #aaaaaa;
+
+    --borda: #333333;
+    --borda-forte: #444444;
+
+    --acento: #e50914;
+    --acento-hover: #b20710;
+
+    --tag-comum-borda: #2e7d32;
+    --tag-comum-texto: #a5d6a7;
+
+    --overlay-loading: rgba(0, 0, 0, 0.55);
+
+    --sombra: rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="light"] {
+    --bg-pagina: #f2f2f2;
+    --bg-main: #ffffff;
+    --bg-elevado: #eeeeee;
+    --bg-elevado-hover: #e2e2e2;
+
+    --texto-titulo: #111111;
+    --texto-principal: #1a1a1a;
+    --texto-secundario: #666666;
+    --texto-terciario: #444444;
+    --texto-info: #555555;
+
+    --borda: #dddddd;
+    --borda-forte: #cccccc;
+
+    --acento: #e50914;
+    --acento-hover: #b20710;
+
+    --tag-comum-borda: #2e7d32;
+    --tag-comum-texto: #1b5e20; /* verde mais escuro: contraste melhor em fundo claro */
+
+    --overlay-loading: rgba(255, 255, 255, 0.65);
+
+    --sombra: rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================
    Reset e Configuração Geral
    ========================================= */
 * {
@@ -9,44 +67,78 @@
 }
 
 body {
-    background-color: #121212; /* Fundo escuro padrão */
-    color: #f5f5f5; /* Texto claro */
+    background-color: var(--bg-pagina);
+    color: var(--texto-principal);
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Foco visível para navegação por teclado (acessibilidade, RF13) */
+:focus-visible {
+    outline: 2px solid var(--texto-titulo);
+    outline-offset: 2px;
 }
 
 /* =========================================
-   Cabeçalho
+   Cabeçalho e Rodapé
    ========================================= */
 header {
+    position: relative; /* ancora o botão de tema no canto */
+    width: 100%;
+    max-width: 1100px;
     margin-bottom: 30px;
     text-align: center;
 }
 
-.logo { 
-    display: flex; 
-    justify-content: center; 
+.logo {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    width: 100%; 
-    margin: 0; 
-    padding: 10px 0; 
-} 
+    width: 100%;
+    margin: 0;
+    padding: 10px 0;
+}
 
-.logo-img { 
+.logo-img {
     width: 180px;
     max-width: 100%;
     height: auto;
-    display: block; 
+    display: block;
+}
+
+/* Botão de alternância de tema */
+.btn-tema {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    margin-top: 0;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--bg-elevado);
+    border: 1px solid var(--borda-forte);
+    color: var(--texto-principal);
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-tema:hover {
+    background-color: var(--bg-elevado-hover);
 }
 
 footer {
     margin-top: auto; /* Empurra o rodapé pro final da página */
     padding-top: 40px;
     font-size: 14px;
-    color: #888888;
+    color: var(--texto-secundario);
 }
 
 /* =========================================
@@ -54,28 +146,33 @@ footer {
    ========================================= */
 main {
     width: 100%;
-    max-width: 600px; /* Não deixa a tela ficar gigante no computador */
-    background-color: #1e1e1e; /* Fundo do card um pouco mais claro que o body */
+    max-width: 600px; /* Largura do formulário */
+    background-color: var(--bg-main);
     padding: 30px;
-    border-radius: 8px; /* Bordas arredondadas */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombreado leve */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--sombra);
+    transition: background-color 0.2s ease, max-width 0.2s ease;
+}
+
+/* Na tela de resultados o container fica mais largo para caber os cards */
+main.main-largo {
+    max-width: 1100px;
 }
 
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #ffffff;
+    color: var(--texto-titulo);
 }
 
-/* Classe para esconder a segunda tela no começo */
+/* Esconde uma tela (sem !important: nenhuma regra de ID força display nela) */
 .oculto {
-    display: none !important;
+    display: none;
 }
 
 /* =========================================
    Formulário (RF09)
    ========================================= */
-/* O formulário usa Flexbox para empilhar tudo certinho */
 #form-perfil {
     display: flex;
     flex-direction: column;
@@ -93,41 +190,46 @@ label {
     font-size: 14px;
 }
 
-/* Estilo das caixas de texto */
 input[type="text"],
 input[type="number"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #333333;
+    border: 1px solid var(--borda);
     border-radius: 5px;
-    background-color: #2b2b2b; /* Fundo do input escuro */
-    color: #ffffff;
+    background-color: var(--bg-elevado);
+    color: var(--texto-principal);
     font-size: 16px;
 }
 
-/* Muda a borda quando o usuário clica para digitar */
+/* Borda vermelha ao focar (o contorno branco/escuro vem da regra :focus-visible) */
 input:focus {
-    outline: none;
-    border-color: #e50914; /* Vermelho */
+    border-color: var(--acento);
+}
+
+/* Placeholder com contraste garantido nos dois temas (o padrão do navegador
+   costuma ser claro demais no tema escuro, ou opaco demais no Firefox) */
+input::placeholder {
+    color: var(--texto-info);
+    opacity: 1;
 }
 
 /* =========================================
    Gêneros (Checkboxes)
    ========================================= */
 fieldset {
-    border: 1px solid #333333;
+    border: 1px solid var(--borda);
     border-radius: 5px;
     padding: 15px;
-    /* Começa em coluna (mobile-first) para telas pequenas */
+    /* Começa em coluna (mobile-first) */
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 10px;
 }
 
 legend {
     padding: 0 10px;
     font-weight: bold;
-    color: #cccccc;
+    color: var(--texto-terciario);
 }
 
 fieldset label {
@@ -142,7 +244,7 @@ fieldset label {
    Botões
    ========================================= */
 button {
-    background-color: #e50914; /* Vermelho */
+    background-color: var(--acento);
     color: #ffffff;
     border: none;
     padding: 15px;
@@ -153,20 +255,35 @@ button {
     margin-top: 10px;
 }
 
-/* Efeito quando passa o mouse por cima do botão */
 button:hover {
-    background-color: #b20710; /* Vermelho mais escuro */
+    background-color: var(--acento-hover);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.generos-status {
+    font-size: 14px;
+    color: var(--texto-terciario);
+    font-weight: normal;
 }
 
 /* =========================================
-   Destaque de Erro nos Campos (Borda Branca)
+   Erros do formulário
+   A borda usa a cor de acento (vermelho) em vez de branco fixo, então
+   funciona em qualquer tema sem precisar de uma variável exclusiva.
+   Vem DEPOIS de input[type=...] e fieldset, com mesma especificidade,
+   por isso vence sem precisar de !important
    ========================================= */
-.input-erro {
-    border: 1px solid #ffffff !important;
+input.input-erro,
+fieldset.input-erro {
+    border: 2px solid var(--acento);
 }
 
 .mensagem-erro {
-    background-color: #e50914;
+    background-color: var(--acento);
     color: #ffffff;
     padding: 12px;
     border-radius: 5px;
@@ -177,23 +294,327 @@ button:hover {
 }
 
 /* =========================================
-   Media Queries (Adaptação para Desktop)
+   Tela de resultados
    ========================================= */
-/* Quando a tela for maior que 768px (computadores/tablets), faz isso: */
+/* :not(.oculto) evita que o display:flex do ID vença a classe .oculto */
+#tela-resultados:not(.oculto) {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os filhos, inclusive o botão */
+    gap: 20px;
+}
+
+#btn-voltar {
+    width: 100%;
+    max-width: 250px;
+    background-color: var(--acento);
+}
+
+#btn-voltar:hover {
+    background-color: var(--acento-hover);
+}
+
+.contador {
+    font-size: 13px;
+    color: var(--texto-secundario);
+    text-align: center;
+}
+
+.boas-vindas {
+    font-size: 15px;
+    color: var(--texto-terciario);
+    text-align: center;
+}
+
+/* =========================================
+   Mensagens de estado do catálogo (RF04/RF05/RF12)
+   ========================================= */
+.aviso-msg,
+.erro-msg {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Carregando e vazio: tom neutro */
+.aviso-msg {
+    background-color: var(--bg-elevado);
+    color: var(--texto-terciario);
+    border: 1px solid var(--borda);
+}
+
+/* Erro: vermelho, igual ao .mensagem-erro do formulário */
+.erro-msg {
+    background-color: var(--acento);
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* =========================================
+   RF09: Cards de resultados (Flexbox, mobile-first)
+   ========================================= */
+/* Área dos cards: coluna no celular */
+#resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.card-serie {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-elevado);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-capa {
+    display: block;
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    background-color: var(--bg-main);
+}
+
+.card-corpo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+}
+
+.card-titulo {
+    font-size: 18px;
+    color: var(--texto-titulo);
+}
+
+.card-info {
+    font-size: 13px;
+    color: var(--texto-info);
+}
+
+.card-compat {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Badges de afinidade: cores fixas (semânticas), iguais nos dois temas,
+   já que o texto sempre aparece e não depende só da cor */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.badge.Alta {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.badge.Media {
+    background-color: #f5a623;
+    color: #1a1a1a;
+}
+
+.badge.Baixa {
+    background-color: #6b6b6b;
+    color: #ffffff;
+}
+
+/* Gêneros */
+.card-generos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-generos-titulo {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--texto-terciario);
+}
+
+.lista-generos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+}
+
+.tag-genero {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: var(--bg-main);
+    border: 1px solid var(--borda-forte);
+}
+
+.tag-comum {
+    border-color: var(--tag-comum-borda);
+    color: var(--tag-comum-texto);
+}
+
+.tag-nao-explorado {
+    color: var(--texto-terciario);
+}
+
+.tag-vazia {
+    color: var(--texto-secundario);
+    border-style: dashed;
+}
+
+/* =========================================
+   Paginação
+   ========================================= */
+.paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-pagina {
+    /* Menor e secundário, não deve competir com o botão "Ver recomendações" */
+    width: auto;
+    margin-top: 0;
+    padding: 10px 16px;
+    font-size: 14px;
+    background-color: var(--bg-elevado);
+    color: var(--texto-principal);
+    border: 1px solid var(--borda-forte);
+}
+
+.btn-pagina:hover:not(:disabled) {
+    background-color: var(--bg-elevado-hover);
+}
+
+.btn-pagina:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.paginacao-indicador {
+    font-size: 14px;
+    color: var(--texto-terciario);
+    white-space: nowrap;
+}
+
+/* =========================================
+   Media Queries (Adaptação para Tablet e Desktop)
+   ========================================= */
+
+/* Tablet e acima: formulário em 2 colunas e 2 cards por linha */
 @media (min-width: 768px) {
 
-    .logo-img { 
+    .logo-img {
         width: 300px;
     }
 
     fieldset {
-        /* Muda de coluna para linha */
         flex-direction: row;
-        flex-wrap: wrap; /* Permite que os itens quebrem a linha se não couber */
+        flex-wrap: wrap; /* Permite quebrar a linha se não couber */
     }
-    
+
     fieldset label {
-        /* Faz cada checkbox ocupar quase metade do espaço, ficando em duas colunas */
-        width: 45%; 
+        width: 45%; /* Cada checkbox ocupa quase metade: duas colunas */
+    }
+
+    #resultados {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card-serie {
+        flex: 0 0 calc(50% - 10px);
+    }
+}
+
+/* Desktop: 3 cards por linha */
+@media (min-width: 1024px) {
+
+    .card-serie {
+        flex: 0 0 calc(33.333% - 14px);
+    }
+}
+
+/* =========================================
+   Tela de loading (melhoria opcional)
+   Logo centralizada, fundo desfocado; ao terminar, ela "sobe" e desaparece
+   ========================================= */
+.tela-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--overlay-loading);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.tela-loading.oculto {
+    display: none;
+}
+
+.tela-loading-logo {
+    width: 220px;
+    max-width: 60vw;
+    animation: logoPulsando 1.2s ease-in-out infinite;
+}
+
+@keyframes logoPulsando {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+/* Classe adicionada por JS quando o catálogo termina de carregar:
+   o fundo desfoca menos e clareia, e a logo "voa" até perto do header */
+.tela-loading.saindo {
+    animation: telaLoadingSaida 0.6s ease forwards;
+}
+
+.tela-loading.saindo .tela-loading-logo {
+    animation: logoSubindo 0.6s ease forwards;
+}
+
+@keyframes telaLoadingSaida {
+    from {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    to {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+}
+
+@keyframes logoSubindo {
+    from { transform: translateY(0) scale(1); }
+    to   { transform: translateY(-40vh) scale(0.55); }
+}
+
+/* Quem prefere menos movimento não recebe a animação de "voar" */
+@media (prefers-reduced-motion: reduce) {
+    .tela-loading-logo {
+        animation: none;
+    }
+
+    .tela-loading.saindo,
+    .tela-loading.saindo .tela-loading-logo {
+        animation: none;
+        opacity: 0;
     }
 }

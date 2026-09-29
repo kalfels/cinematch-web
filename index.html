@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+        Aplica o tema salvo (ou "dark" por padrão) antes do CSS ser processado,
+        para não piscar no tema errado por uma fração de segundo ao carregar
+    -->
+    <script>
+        (function () {
+            var temaSalvo = localStorage.getItem("cinematchTema");
+            var tema = temaSalvo === "light" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", tema);
+        })();
+    </script>
     <title>CineMatch Web | Recomendação de Séries</title>
     <meta name="description" content="Descubra sua próxima série favorita com o motor de recomendação em tempo real do CineMatch.">
     <!-- Tags Open Graph (OG) para Redes Sociais -->
@@ -15,6 +26,7 @@
 </head>
 <body>
     <header>
+        <button id="btn-tema" class="btn-tema" type="button" aria-label="Alternar para tema claro">🌙</button>
         <h1 class="logo">
             <img src="assets/logotipo.png" alt="CineMatch Web. Recomendação de Séries em Tempo Real - Página Inicial" class="logo-img">
         </h1>
@@ -35,39 +47,39 @@
                     <input type="number" id="idade" min="1" placeholder="Ex: 28" required>
                 </div>
 
-                <fieldset>
+                <fieldset id="fieldset-generos">
                     <legend>Gêneros favoritos</legend>
-                    <label><input type="checkbox" name="genero" value="Drama"> Drama</label>
-                    <label><input type="checkbox" name="genero" value="Comedy"> Comédia</label>
-                    <label><input type="checkbox" name="genero" value="Action"> Ação</label>
-                    <label><input type="checkbox" name="genero" value="Horror"> Terror</label>
-                    <label><input type="checkbox" name="genero" value="Science-Fiction"> Ficção Científica</label>
+                    <p class="generos-status">Carregando gêneros...</p>
                 </fieldset>
 
-                <button type="submit">Ver recomendações</button>
+                <button type="submit" id="btn-enviar" disabled>Ver recomendações</button>
             </form>
         </section>
 
         <section id="tela-resultados" class="oculto">
             <h2>Recomendado pra você</h2>
-            
-            <div id="resultados">
-                
-                <article class="card-serie">
-                    <h3>Título da Série Exemplo</h3>
-                    <p>Compatibilidade: 100%</p>
-                    <span class="badge Alta">Alta afinidade</span>
-                </article>
-                
-            </div>
-            
+
+            <div id="resultados" aria-live="polite"></div>
+
+            <p id="contador-recalculos" class="contador" aria-live="polite"></p>
+
             <button id="btn-voltar">Trocar perfil</button>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 CineMatch Web. Projeto Avaliativo SCTEC SENAI.</p>
+        <small>&copy; 2026 CineMatch Web. Projeto Avaliativo SCTEC SENAI.</small>
     </footer>
+
+    <!--
+        Overlay de loading (melhoria opcional): logo centralizada com o fundo
+        desfocado, exibida só enquanto o catálogo é buscado na API.
+        aria-hidden porque é só decorativo; quem usa leitor de tela já recebe
+        o status real pelo aria-live em #resultados.
+    -->
+    <div id="tela-loading" class="tela-loading oculto" aria-hidden="true">
+        <img src="assets/logotipo.png" alt="" class="tela-loading-logo">
+    </div>
 
     <script type="module" src="script.js"></script>
 </body>
