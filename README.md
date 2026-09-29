@@ -242,6 +242,13 @@ cinematch-web/
 
 ---
 
+## Kanban do Projeto no Trello
+
+🔗 *[(https://trello.com/b/O5jOr1as/cinematch-web)]*
+
+---
+
+
 ## Vídeo de apresentação
 
 📺 *[(https://youtu.be/P28D3YnTOXg)]*
