@@ -28,6 +28,8 @@
 - [Arquitetura e decisões técnicas](#arquitetura-e-decisões-técnicas)
 - [Testes realizados](#testes-realizados)
 - [Capturas de tela](#capturas-de-tela)
+- [Link Publico do Projeto](#link-publico-do-projeto)
+- [Kanban do Projeto no Trello](#kanban-do-projeto-no-trello)
 - [Vídeo de apresentação](#vídeo-de-apresentação)
 - [Autor](#autor)
 
@@ -242,12 +244,17 @@ cinematch-web/
 
 ---
 
+## Link publico do projeto
+
+🔗 *[(https://cinematch.bitserv.com.br)]*
+
+---
+
 ## Kanban do Projeto no Trello
 
 🔗 *[(https://trello.com/b/O5jOr1as/cinematch-web)]*
 
 ---
-
 
 ## Vídeo de apresentação
 
